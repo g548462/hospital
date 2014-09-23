@@ -5,7 +5,6 @@ var Busboy = require('busboy');
 var fs = require('fs');
 
 router.post('/', function(req, res) {
-  console.log(req);
   var busboy = new Busboy({ headers: req.headers });
   busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
     console.log("on file");
@@ -16,13 +15,12 @@ router.post('/', function(req, res) {
   });
   busboy.on('finish', function() {
     console.log("on finish");
-    res.writeHead(200, { 'Connection': 'close' });
-    res.end("That's all folks!");
+    res.redirect('/');
   });
+  //console.log(req.body.content);
+  //res.send("OK");
   return req.pipe(busboy);
 
-  //console.log("test");
-  res.send("OK");
 });
 
 /*router.get('/',function(req,res){

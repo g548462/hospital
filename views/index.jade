@@ -3,6 +3,120 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
-  form(action="/upload",method="POST",enctype="multipart/form-data")
-    input(type="file",name="filefield",multiple)#upload
-    input(type="submit")
+  form(action='/upload',method="POST",enctype="multipart/form-data",id="form_id")
+    input(type="file",name="filefield")#file
+    br
+    font(size="4") <b>Project name:</b>
+    input(type="text",size='15')#Project 
+    br
+    font(size="4") <b>Status:</b>
+    input(type="radio",name="status",value="Normal",checked)
+    font(size="3") Normal
+    input(type="radio",name="status",value="Disease") 
+    font(size="3") Disease <br>
+    font(size="4") <b>Age:</b>
+    input(type="text",size="5")#Age
+    br
+    font(size="4") <b>L/R Hand:</b>
+    input(type="radio",name="hand",value="Right",checked)
+    font(size="3") Right-Hand
+    input(type="radio",name="hand",value="Leftt")
+    font(size="3") Left-Hand <br>
+    font(size="4") <b>Organ:</b>
+    input(type="text",size="10")#Organ
+    br
+    font(size="4") <b>Species:</b>
+    input(type="text",size="10")#Species
+    br
+    font(size="4") <b>Scan Date:</b>
+    input(type="text",size="15")#Date
+    br
+    font(size="4") <b>Unknow_title:</b>
+    input(type="radio",name="Unknow",value="T1",checked)
+    font(size="3") T1
+    input(type="radio",name="Unknow",value="T2")
+    font(size="3") T2 
+    input(type="radio",name="Unknow",value="DSI")
+    font(size="3") DSI
+    input(type="radio",name="Unknow",value="fMRI")
+    font(size="3") fMRI 
+    input(type="radio",name="Unknow",value="Task fMRI")
+    font(size="3") Task fMRI <br>
+    font(size="4") <b>Description:</b><br>
+    textarea(rows="6",cols="60")#Description
+    br
+    input(type="submit", id="submit_btn",value="Upload")
+
+  script(type='text/javascript').
+
+    function prepareUpload(event)
+    {
+      console.log("Change");
+      files = $('#file')[0].files[0];
+    }
+    $('#form_id').submit(uploadFiles);
+
+    function uploadFiles(event)
+    {
+      var projectName = $('#Project').val();
+      var status = $('input[name=status]').val();
+      var age = $('#Age').val();
+      var hand = $('input[name=hand]').val();
+      var organ = $('#Organ').val();
+      var species = $('#Species').val();
+      var mdate = $('#Date').val();
+      var unknow = $('input[name=Unknow]').val();
+      var des = $('#Description').val();
+      var files = $('#file')[0].files[0];
+      
+      //check all input fileds
+      if(!(projectName && age && organ && species && mdate && des))
+      {
+        alert('Please check all input field');
+        return false;
+      }
+
+      //check input file
+      else if(typeof files === 'undefined')
+      {
+        alert("You DONT have file");
+        return false;
+      }
+
+      //after check all input, Start to upload
+      console.log("File upload");
+      $.post('/db',{"projectName":projectName,"Age":age,"Hand":hand,"Organ":organ,
+                "Species":species,"Date":mdate,"Unknow":unknow,"Des":des},function(data){
+        alert(data);
+      });
+    }
+
+    function GO()
+    {
+      var projectName = $('#Project').val();
+      var status = $('input[name=status]').val();
+      var age = $('#Age').val();
+      var hand = $('input[name=hand]').val();
+      var organ = $('#Organ').val();
+      var species = $('#Species').val();
+      var mdate = $('#Date').val();
+      var unknow = $('input[name=Unknow]').val();
+      var des = $('#Description').val();
+  
+      $.post('/db',{"projectName":projectName,"Age":age,"hand":hand,"organ":organ,
+                    "species":species,"date":mdate,"unknow":unknow,"des":des},function(data){
+        alert('post finish');
+      });
+      
+      console.log("project name --> " + projectName);
+      console.log('status --> ' + status);
+      console.log('age --> ' + age);
+      console.log('hand --> ' + hand);
+      console.log('organ --> ' + organ);
+      console.log('species --> ' + species);
+      console.log('date -- > ' + mdate);
+      console.log('unknow --> ' + unknow);
+      console.log('des --> ' + des);
+
+    }
+
