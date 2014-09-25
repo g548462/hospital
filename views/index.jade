@@ -4,10 +4,10 @@ block content
   h1= title
   p Welcome to #{title}
   form(action='/upload',method="POST",enctype="multipart/form-data",id="form_id")
-    input(type="file",name="filefield")#file
+    input(type="file",name="filefield",required)#file
     br
     font(size="4") <b>Project name:</b>
-    input(type="text",size='15')#Project 
+    input(type="text",size='15',required)#Project 
     br
     font(size="4") <b>Status:</b>
     input(type="radio",name="status",value="Normal",checked)
@@ -15,7 +15,7 @@ block content
     input(type="radio",name="status",value="Disease") 
     font(size="3") Disease <br>
     font(size="4") <b>Age:</b>
-    input(type="text",size="5")#Age
+    input(type="text",size="5",required)#Age
     br
     font(size="4") <b>L/R Hand:</b>
     input(type="radio",name="hand",value="Right",checked)
@@ -23,13 +23,13 @@ block content
     input(type="radio",name="hand",value="Leftt")
     font(size="3") Left-Hand <br>
     font(size="4") <b>Organ:</b>
-    input(type="text",size="10")#Organ
+    input(type="text",size="10",required)#Organ
     br
     font(size="4") <b>Species:</b>
-    input(type="text",size="10")#Species
+    input(type="text",size="10",required)#Species
     br
     font(size="4") <b>Scan Date:</b>
-    input(type="text",size="15")#Date
+    input(type="text",size="15",required)#Date
     br
     font(size="4") <b>Unknow_title:</b>
     input(type="radio",name="Unknow",value="T1",checked)
@@ -43,7 +43,7 @@ block content
     input(type="radio",name="Unknow",value="Task fMRI")
     font(size="3") Task fMRI <br>
     font(size="4") <b>Description:</b><br>
-    textarea(rows="6",cols="60")#Description
+    textarea(rows="6",cols="60",required)#Description
     br
     input(type="submit", id="submit_btn",value="Upload")
 
@@ -58,6 +58,7 @@ block content
 
     function uploadFiles(event)
     {
+      
       var projectName = $('#Project').val();
       var status = $('input[name=status]').val();
       var age = $('#Age').val();
@@ -82,7 +83,7 @@ block content
         alert("You DONT have file");
         return false;
       }
-
+      
       //after check all input, Start to upload
       console.log("File upload");
       $.post('/db',{"projectName":projectName,"Age":age,"Hand":hand,"Organ":organ,
